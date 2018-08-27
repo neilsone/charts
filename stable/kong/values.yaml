@@ -125,7 +125,6 @@ postgresql:
 # https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/custom-types.md
 
 ingressController:
-  # Disabled by default
   enabled: false
   image:
     repository: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller
