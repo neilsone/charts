@@ -120,14 +120,8 @@ postgresql:
 # Ingress Controller:
 # Kong Ingress Controller's primary purpose is to satisfy Ingress resources
 # created in k8s. It uses CRDs for more fine grained control over routing and
-# for Kong specific configuration.
-
-# Kong ingress controller relies on several Custom Resource Definition object
-# to declare the additional information to Ingress rules and synchronize
-# configuration with the Kong admin API. Each one of this new object in
-# Kubernetes have a one-to-one relation with a Kong resource.  The custom
-# reasouces are: kongconsumer, kongcredential, kongplugin and kongingress. You
-# can can learn about them here :
+# for Kong specific configuration. The custom reasouces are: kongconsumer,
+# kongcredential, kongplugin and kongingress. You can can learn about them here:
 # https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/custom-types.md
 
 ingressController:
