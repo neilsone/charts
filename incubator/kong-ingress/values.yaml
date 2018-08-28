@@ -1,0 +1,99 @@
+# Default values for kong-ingress.
+
+replicaCount: 1
+
+image:
+  repository: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller
+  tag: 0.1.0
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+livenessProbe:
+  failureThreshold: 3
+  httpGet:
+    path: "/healthz"
+    port: 10254
+    scheme: HTTP
+  initialDelaySeconds: 180
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+
+readinessProbe:
+  failureThreshold: 3
+  httpGet:
+    path: "/healthz"
+    port: 10254
+    scheme: HTTP
+    initialDelaySeconds: 120
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+
+kong:
+  image:
+    repository: kong
+    tag: 0.13.1
+  env:
+    database: postgres
+  # Set runMigrations to run Kong migrations
+  runMigrations: true
+  postgresql:
+    enabled: false
+    postgresUser: kong
+    postgresDatabase: kong
+    persistence:
+      enabled: false
+  cassandra:
+    enabled: false
+  proxy:
+    # If you want to specify annotations for the proxy service, uncomment the following
+    # line, add additional or adjust as needed, and remove the curly braces after 'annotations:'.
+    annotations: {}
+    #  service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+    # HTTPS traffic on the proxy port
+    useTLS: true
+    servicePort: 8443
+    containerPort: 8443
+    type: NodePort
+    # Set a nodePort which is available
+    # nodePort: 32443
+  admin:
+    # If you want to specify annotations for the admin service, uncomment the following
+    # line, add additional or adjust as needed, and remove the curly braces after 'annotations:'.
+    annotations: {}
+    # HTTP traffic on the admin port is mandatory
+    useTLS: false
+    servicePort: 8001
+    containerPort: 8001
+    # Kong admin service type
+    type: NodePort
+    # Set a nodePort which is available
+    # nodePort: 32444
+  readinessProbe:
+    httpGet:
+      # No support fot HTTPS on admin
+      scheme: HTTP
+  livenessProbe:
+    httpGet:
+      scheme: HTTP
